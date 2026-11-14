@@ -1,7 +1,7 @@
 {
   "name": "Sky Luach · לוח השמים",
   "short_name": "Sky Luach",
-  "description": "The Jewish calendar three ways - fixed, observed and Pre-Temple Period - from NASA JPL astronomy.",
+  "description": "The Jewish calendar three ways - fixed, observed and Early Temple Period - from NASA JPL astronomy.",
   "start_url": "./?source=homescreen",
   "scope": "./",
   "display": "standalone",
