@@ -28,6 +28,11 @@
              padding: 0.8rem 1rem; margin: 0 0 1.4rem; font-weight: 600; }
   a.go { display: block; background: #7a3a6e; color: #fff; text-decoration: none; font-weight: 700;
           font-size: 1.15rem; padding: 0.95rem; border-radius: 0.5rem; border: 1px solid #e8bd5c; }
+  button.install { display: none; width: 100%; margin-top: 0.8rem; background: #e8bd5c; color: #1a120c; border: 0;
+                   font: 700 1.1rem/1.3 "Palatino Linotype", Palatino, Georgia, serif; padding: 0.9rem; border-radius: 0.5rem; cursor: pointer; }
+  .ios { display: none; text-align: left; background: #1c2740; border: 1px solid #a9c9f0; border-radius: 0.4rem;
+         padding: 0.8rem 1rem; margin-top: 0.9rem; }
+  .ios b { color: #e8bd5c; }
   .wait { color: #dccdab; font-size: 0.92rem; margin-top: 0.6rem; }
   details { text-align: left; background: #2a1d13; border: 1px solid #b8834a; border-radius: 0.4rem;
              padding: 0.7rem 1rem; margin-top: 1.1rem; }
@@ -45,9 +50,14 @@
   <p class="sub">The Jewish calendar three ways: fixed, observed by the crescent, and by the true new moon (Pre-Temple Period), from NASA JPL astronomy.</p>
   <div class="status" id="status">Opening Sky Luach ...</div>
   <a class="go" id="go" href="#">Open Sky Luach</a>
+  <button class="install" id="install" type="button">Add Sky Luach to this device</button>
+  <div class="ios" id="ios">To put Sky Luach on this <span id="iosdev">iPad</span>'s home screen: tap the <b>Share</b> button
+    (the square with an arrow, at the top right on iPad or the bottom on iPhone), scroll down, tap
+    <b>Add to Home Screen</b>, then <b>Add</b>.</div>
   <p class="wait">If it has been asleep it shows "This app has gone to sleep": tap the button there and wait about a minute.</p>
   <details id="howto">
     <summary>Put it on your home screen</summary>
+    <p>The page must be opened in <b>Safari</b> on iPhone/iPad, or in <b>Chrome</b> on Android.</p>
     <p><b>iPhone or iPad (Safari):</b> tap the Share button (square with an arrow), then <b>Add to Home Screen</b>, then <b>Add</b>.</p>
     <p><b>Android (Chrome, Samsung Internet, Edge):</b> tap the three dots, then <b>Add to home screen</b> or <b>Install app</b>.</p>
     <p>Then open it from the gold capital-and-crescent icon <b>Sky Luach</b>: it goes straight to the app.</p>
@@ -56,7 +66,7 @@
 </main>
 <script>
   // The address of the app on Streamlit Community Cloud. Change this one line after deploying.
-  var APP_URL = "https://REPLACE-WITH-YOUR-SKY-LUACH-ADDRESS.streamlit.app/";
+  var APP_URL = "https://sky-luach-negcwxfk7eafqesdvhpqqr.streamlit.app/";
   var ready = APP_URL.indexOf("REPLACE-WITH") === -1;
   var go = document.getElementById("go");
   var status = document.getElementById("status");
@@ -78,6 +88,29 @@
       sessionStorage.setItem("skyluach-opened", "1");
       setTimeout(function () { window.location.replace(APP_URL); }, 600);
     }
+  }
+  // Offer to add the launcher to the home screen.
+  // Android/Chrome: the browser hands us its install prompt, shown when the button is pressed.
+  // iPhone/iPad: Apple allows no prompt, so show where the Share > Add to Home Screen command is.
+  var deferredPrompt = null;
+  var installBtn = document.getElementById("install");
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (!standalone) { installBtn.style.display = "block"; }
+  });
+  installBtn.addEventListener("click", function () {
+    if (!deferredPrompt) { return; }
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function () { deferredPrompt = null; installBtn.style.display = "none"; });
+  });
+  window.addEventListener("appinstalled", function () { installBtn.style.display = "none"; });
+  var ua = navigator.userAgent || "";
+  var isIPad = /iPad/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  var isIOS = isIPad || /iPhone|iPod/.test(ua);
+  if (isIOS && !standalone) {
+    document.getElementById("iosdev").textContent = isIPad ? "iPad" : "iPhone";
+    document.getElementById("ios").style.display = "block";
   }
   if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js").catch(function () {}); }
 </script>
