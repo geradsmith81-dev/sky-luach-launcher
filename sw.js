@@ -1,5 +1,5 @@
 // Keeps the launcher page itself available offline (the app needs the internet anyway).
-const CACHE = "sky-luach-launcher-v1";
+const CACHE = "sky-luach-launcher-v2";
 const FILES = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png",
                "icons/apple-touch-icon.png", "icons/favicon-32.png",
                "icons/NotoSansPhoenician-Regular.ttf"];
