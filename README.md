@@ -4,4 +4,6 @@ Home-screen page for the [Sky Luach app](https://sky-luach.streamlit.app/). Add 
 
 The app's address is the one line `var APP_URL` in `index.html`.
 
-The Paleo-Hebrew font in `icons/` is Noto Sans Phoenician (SIL Open Font License, see `icons/NotoSansPhoenician_OFL.txt`).
+## License
+
+The launcher is released under the [MIT License](LICENSE), © 2026 Gerad Smith. The Noto Sans Phoenician font in `icons/` is © The Noto Project Authors, under the SIL Open Font License 1.1 (`icons/NotoSansPhoenician_OFL.txt`).
